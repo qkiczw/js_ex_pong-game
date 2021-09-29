@@ -21,13 +21,17 @@ const BALL_START_POS_Y = CANVAS_HEIGHT / 2;
 const BALL_START_DIRECTION_X = 4.5;
 const BALL_START_DIRECTION_Y = 1.5;
 
+const STATE_CHANGE_INTERVAL = 20;
+
 // Game state
-let ballx = BALL_START_POS_X; // strart position
-let bally = BALL_START_POS_Y; // start position
+let ballX = BALL_START_POS_X; // strart position
+let ballY = BALL_START_POS_Y; // start position
 let ballDX = BALL_START_DIRECTION_X; // ball direction X
 let ballDY = BALL_START_DIRECTION_Y; // ball direction Y
 let p1PaddleY = PADDLE_START_POS_Y; // p1 paddle start position Y
 let p2PaddleY = PADDLE_START_POS_Y; // p2 paddle start position Y
+let p1Points = 0; // p1 points
+let p2Points = 0; // p2 points
 
 function drawPaddle(posX, posY) {
   ctx.fillRect(posX, posY, PADDLE_WIDTH, PADDLE_HEIGHT);
@@ -58,3 +62,35 @@ drawPoints("7", POINT_BOARD_P2_POS_X, POINT_BOARD_POS_Y);
 
 // drawing ball
 drawBall(BALL_START_POS_X, BALL_START_POS_Y, BALL_RADIUS);
+
+// Drawing accual state
+function drawState() {
+  clearCanvas();
+
+  drawPoints(p1Points.toString(), POINT_BOARD_P1_POS_X, POINT_BOARD_POS_Y);
+  drawPoints(p2Points.toString(), POINT_BOARD_P2_POS_X, POINT_BOARD_POS_Y);
+
+  drawPaddle(PADDLE_P1_POS_X, p1PaddleY);
+  drawPaddle(PADDLE_P2_POS_X, p2PaddleY);
+
+  drawBall(ballX, ballY, BALL_RADIUS);
+}
+
+function updateState() {
+  //code tu update state
+  ballX = ballX + ballDX; // same as ballX += ballDX
+  ballY = ballY + ballDY; // same as ballY += ballDY
+
+  p1PaddleY++;
+  p2PaddleY--;
+
+  p1Points++;
+  p2Points += 3;
+}
+
+function udpdateAndDrawState() {
+  updateState();
+  drawState();
+}
+
+setInterval(udpdateAndDrawState, STATE_CHANGE_INTERVAL);
