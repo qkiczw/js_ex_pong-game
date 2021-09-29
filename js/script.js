@@ -14,6 +14,7 @@ const PADDLE_HEIGHT = 100; // paddle height
 const PADDLE_P1_POS_X = 10; // player 1 paddle posX
 const PADDLE_P2_POS_X = 770; // player 2 paddle posX
 const PADDLE_START_POS_Y = CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2; // paddle start posY (is equal to (CANVAS_HEIGHT - PADDLE_HEIGHT) / 2)
+const PADDLE_STEP = 5;
 
 const BALL_RADIUS = 15;
 const BALL_START_POS_X = CANVAS_WIDTH / 2;
@@ -22,6 +23,17 @@ const BALL_START_DIRECTION_X = 4.5;
 const BALL_START_DIRECTION_Y = 1.5;
 
 const STATE_CHANGE_INTERVAL = 20;
+
+// padle actions
+const PADDLE_ACTION_STOP = "stop";
+const PADDLE_ACTION_UP = "up";
+const PADDLE_ACTION_DOWN = "down";
+
+// players buttons
+const P1_BUTTON_UP = "KeyQ";
+const P1_BUTTON_DOWN = "KeyA";
+const P2_BUTTON_UP = "KeyP";
+const P2_BUTTON_DOWN = "KeyL";
 
 // Game state
 let ballX = BALL_START_POS_X; // strart position
@@ -32,6 +44,8 @@ let p1PaddleY = PADDLE_START_POS_Y; // p1 paddle start position Y
 let p2PaddleY = PADDLE_START_POS_Y; // p2 paddle start position Y
 let p1Points = 0; // p1 points
 let p2Points = 0; // p2 points
+let p1Action = PADDLE_ACTION_STOP; // starting paddle action
+let p2Action = PADDLE_ACTION_STOP; // starting paddle action
 
 function drawPaddle(posX, posY) {
   ctx.fillRect(posX, posY, PADDLE_WIDTH, PADDLE_HEIGHT);
@@ -81,12 +95,35 @@ function updateState() {
   ballX = ballX + ballDX; // same as ballX += ballDX
   ballY = ballY + ballDY; // same as ballY += ballDY
 
-  p1PaddleY++;
-  p2PaddleY--;
+  if (p1Action === PADDLE_ACTION_UP) {
+    p1PaddleY -= PADDLE_STEP;
+  } else if (p1Action === PADDLE_ACTION_DOWN) {
+    p1PaddleY += PADDLE_STEP;
+  }
+
+  if (p2Action === "up") {
+    p2PaddleY -= PADDLE_STEP;
+  } else if (p2Action === "down") {
+    p2PaddleY += PADDLE_STEP;
+  }
 
   p1Points++;
   p2Points += 3;
 }
+
+window.addEventListener("keydown", function (event) {
+  if (event.code === P1_BUTTON_UP) {
+    p1Action = PADDLE_ACTION_UP;
+  } else if (event.code === P1_BUTTON_DOWN) {
+    p1Action = PADDLE_ACTION_DOWN;
+  }
+
+  if (event.code === P2_BUTTON_UP) {
+    p2Action = PADDLE_ACTION_UP;
+  } else if (event.code === P2_BUTTON_DOWN) {
+    p2Action = PADDLE_ACTION_DOWN;
+  }
+});
 
 function udpdateAndDrawState() {
   updateState();
