@@ -90,11 +90,7 @@ function drawState() {
   drawBall(ballX, ballY, BALL_RADIUS);
 }
 
-function updateState() {
-  //code tu update state
-  ballX = ballX + ballDX; // same as ballX += ballDX
-  ballY = ballY + ballDY; // same as ballY += ballDY
-
+function movePaddles() {
   if (p1Action === PADDLE_ACTION_UP) {
     p1PaddleY -= PADDLE_STEP;
   } else if (p1Action === PADDLE_ACTION_DOWN) {
@@ -106,9 +102,14 @@ function updateState() {
   } else if (p2Action === "down") {
     p2PaddleY += PADDLE_STEP;
   }
+}
 
-  p1Points++;
-  p2Points += 3;
+function updateState() {
+  //code tu update state
+  ballX = ballX + ballDX; // same as ballX += ballDX
+  ballY = ballY + ballDY; // same as ballY += ballDY
+
+  movePaddles();
 }
 
 window.addEventListener("keydown", function (event) {
@@ -122,6 +123,20 @@ window.addEventListener("keydown", function (event) {
     p2Action = PADDLE_ACTION_UP;
   } else if (event.code === P2_BUTTON_DOWN) {
     p2Action = PADDLE_ACTION_DOWN;
+  }
+});
+window.addEventListener("keyup", function (event) {
+  let code = event.code;
+  if (
+    (code === P1_BUTTON_UP && p1Action === PADDLE_ACTION_UP) ||
+    (code === P1_BUTTON_DOWN && p1Action === PADDLE_ACTION_DOWN)
+  ) {
+    p1Action = PADDLE_ACTION_STOP;
+  } else if (
+    (code === P2_BUTTON_UP && p2Action === PADDLE_ACTION_UP) ||
+    (code === P2_BUTTON_DOWN && p2Action === PADDLE_ACTION_DOWN)
+  ) {
+    p2Action = PADDLE_ACTION_STOP;
   }
 });
 
