@@ -18,8 +18,16 @@ const PADDLE_START_POS_Y = CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2; // paddle star
 const BALL_RADIUS = 15;
 const BALL_START_POS_X = CANVAS_WIDTH / 2;
 const BALL_START_POS_Y = CANVAS_HEIGHT / 2;
-const BALL_START_SPEED_X = 4.5;
-const BALL_START_SPEED_Y = 1.5;
+const BALL_START_DIRECTION_X = 4.5;
+const BALL_START_DIRECTION_Y = 1.5;
+
+// Game state
+let ballx = BALL_START_POS_X; // strart position
+let bally = BALL_START_POS_Y; // start position
+let ballDX = BALL_START_DIRECTION_X; // ball direction X
+let ballDY = BALL_START_DIRECTION_Y; // ball direction Y
+let p1PaddleY = PADDLE_START_POS_Y; // p1 paddle start position Y
+let p2PaddleY = PADDLE_START_POS_Y; // p2 paddle start position Y
 
 function drawPaddle(posX, posY) {
   ctx.fillRect(posX, posY, PADDLE_WIDTH, PADDLE_HEIGHT);
