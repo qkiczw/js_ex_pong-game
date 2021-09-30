@@ -34,6 +34,7 @@ const P1_BUTTON_UP = "KeyQ";
 const P1_BUTTON_DOWN = "KeyA";
 const P2_BUTTON_UP = "KeyP";
 const P2_BUTTON_DOWN = "KeyL";
+const PAUSE_BUTTON = "KeyB";
 
 // Game state
 let ballX = BALL_START_POS_X; // strart position
@@ -46,6 +47,7 @@ let p1Points = 0; // p1 points
 let p2Points = 0; // p2 points
 let p1Action = PADDLE_ACTION_STOP; // starting paddle action
 let p2Action = PADDLE_ACTION_STOP; // starting paddle action
+let gamePaused = false;
 
 function drawPaddle(posX, posY) {
   ctx.fillRect(posX, posY, PADDLE_WIDTH, PADDLE_HEIGHT);
@@ -155,9 +157,18 @@ window.addEventListener("keyup", function (event) {
   }
 });
 
+window.addEventListener("keydown", function (event) {
+  let code = event.code;
+  if (code === PAUSE_BUTTON) {
+    gamePaused = !gamePaused; // this sets opposite boolean just like toggle in classList
+  }
+});
+
 function udpdateAndDrawState() {
-  updateState();
-  drawState();
+  if (!gamePaused) {
+    updateState();
+    drawState();
+  }
 }
 
 setInterval(udpdateAndDrawState, STATE_CHANGE_INTERVAL);
