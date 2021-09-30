@@ -90,17 +90,32 @@ function drawState() {
   drawBall(ballX, ballY, BALL_RADIUS);
 }
 
+function coerceIn(val, min, max) {
+  return Math.max(Math.min(val, max), min);
+}
+
+// this funtction stops paddle at the y end position (top and bottom)
+function coercePaddle(paddleY) {
+  const minPaddleY = 0;
+  const maxPaddleY = CANVAS_HEIGHT - PADDLE_HEIGHT;
+
+  return coerceIn(paddleY, minPaddleY, maxPaddleY);
+}
+
 function movePaddles() {
+  const yMin = 0;
+  const yMax = CANVAS_HEIGHT - PADDLE_HEIGHT;
+
   if (p1Action === PADDLE_ACTION_UP) {
-    p1PaddleY -= PADDLE_STEP;
+    p1PaddleY = coercePaddle(p1PaddleY - PADDLE_STEP, yMin, yMax);
   } else if (p1Action === PADDLE_ACTION_DOWN) {
-    p1PaddleY += PADDLE_STEP;
+    p1PaddleY = coercePaddle(p1PaddleY + PADDLE_STEP, yMin, yMax);
   }
 
   if (p2Action === "up") {
-    p2PaddleY -= PADDLE_STEP;
+    p2PaddleY = coercePaddle(p2PaddleY - PADDLE_STEP, yMin, yMax);
   } else if (p2Action === "down") {
-    p2PaddleY += PADDLE_STEP;
+    p2PaddleY = coercePaddle(p2PaddleY + PADDLE_STEP, yMin, yMax);
   }
 }
 
