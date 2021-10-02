@@ -158,19 +158,22 @@ function updateState() {
     moveBallToStartPos();
   }
 
-  function ballHitsTopWall() {
+  function shouldBallBounceFromTopWall() {
     return ballY - BALL_RADIUS <= 0;
   }
 
-  function ballHitsBottomWall() {
+  function shouldBallBounceFromTBottomWall() {
     return ballY + BALL_RADIUS >= CANVAS_HEIGHT;
   }
-
-  if (ballHitsTopWall()) {
+  function ballBounceFromWall() {
     ballDY = -ballDY;
   }
-  if (ballHitsBottomWall()) {
-    ballDY = -ballDY;
+
+  if (shouldBallBounceFromTopWall()) {
+    ballBounceFromWall();
+  }
+  if (shouldBallBounceFromTBottomWall()) {
+    ballBounceFromWall();
   }
 }
 
