@@ -138,22 +138,24 @@ function updateState() {
   // if ball is before left side of the left wall
   // if ball is after  right side of the right wall
 
-  function isBallAfterRightWall() {
+  function isBallOutSideRightSide() {
     return ballX >= CANVAS_WIDTH;
   }
-  function isBallBeforeLeftWall() {
+  function isBallOutSideLeftSide() {
     return ballX <= 0;
   }
-
-  if (isBallAfterRightWall()) {
-    p1Points++;
+  function moveBallToStartPos() {
     ballX = BALL_START_POS_X;
     ballY = BALL_START_POS_Y;
   }
-  if (isBallBeforeLeftWall()) {
+
+  if (isBallOutSideRightSide()) {
+    p1Points++;
+    moveBallToStartPos();
+  }
+  if (isBallOutSideLeftSide()) {
     p2Points++;
-    ballX = BALL_START_POS_X;
-    ballY = BALL_START_POS_Y;
+    moveBallToStartPos();
   }
 }
 
