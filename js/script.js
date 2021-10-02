@@ -20,7 +20,7 @@ const BALL_RADIUS = 15;
 const BALL_START_POS_X = CANVAS_WIDTH / 2;
 const BALL_START_POS_Y = CANVAS_HEIGHT / 2;
 const BALL_START_DIRECTION_X = 4.5;
-const BALL_START_DIRECTION_Y = 1.5;
+const BALL_START_DIRECTION_Y = -11.5;
 
 const STATE_CHANGE_INTERVAL = 20;
 
@@ -138,24 +138,39 @@ function updateState() {
   // if ball is before left side of the left wall
   // if ball is after  right side of the right wall
 
-  function isBallOutSideRightSide() {
-    return ballX >= CANVAS_WIDTH;
+  function isBallOutSideOfRightSide() {
+    return ballX >= CANVAS_WIDTH + BALL_RADIUS;
   }
-  function isBallOutSideLeftSide() {
-    return ballX <= 0;
+  function isBallOutSideOfLeftSide() {
+    return ballX <= 0 - BALL_RADIUS;
   }
   function moveBallToStartPos() {
     ballX = BALL_START_POS_X;
     ballY = BALL_START_POS_Y;
   }
 
-  if (isBallOutSideRightSide()) {
+  if (isBallOutSideOfRightSide()) {
     p1Points++;
     moveBallToStartPos();
   }
-  if (isBallOutSideLeftSide()) {
+  if (isBallOutSideOfLeftSide()) {
     p2Points++;
     moveBallToStartPos();
+  }
+
+  function ballHitsTopWall() {
+    return ballY - BALL_RADIUS <= 0;
+  }
+
+  function ballHitsBottomWall() {
+    return ballY + BALL_RADIUS >= CANVAS_HEIGHT;
+  }
+
+  if (ballHitsTopWall()) {
+    ballDY = -ballDY;
+  }
+  if (ballHitsBottomWall()) {
+    ballDY = -ballDY;
   }
 }
 
