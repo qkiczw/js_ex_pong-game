@@ -121,12 +121,40 @@ function movePaddles() {
   }
 }
 
+function moveBallByStep() {
+  ballX += ballDX; // the same as ballX = ballX + ballDX;
+  ballY += ballDY; // the same as ballY = ballY + ballDY;
+}
+
+function moveBall() {
+  moveBallByStep();
+}
+
 function updateState() {
   //code tu update state
-  ballX = ballX + ballDX; // same as ballX += ballDX
-  ballY = ballY + ballDY; // same as ballY += ballDY
-
+  moveBall();
   movePaddles();
+
+  // if ball is before left side of the left wall
+  // if ball is after  right side of the right wall
+
+  function isBallAfterRightWall() {
+    return ballX >= CANVAS_WIDTH;
+  }
+  function isBallBeforeLeftWall() {
+    return ballX <= 0;
+  }
+
+  if (isBallAfterRightWall()) {
+    p1Points++;
+    ballX = BALL_START_POS_X;
+    ballY = BALL_START_POS_Y;
+  }
+  if (isBallBeforeLeftWall()) {
+    p2Points++;
+    ballX = BALL_START_POS_X;
+    ballY = BALL_START_POS_Y;
+  }
 }
 
 window.addEventListener("keydown", function (event) {
