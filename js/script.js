@@ -159,21 +159,53 @@ function updateState() {
   }
 
   function shouldBallBounceFromTopWall() {
-    return ballY - BALL_RADIUS <= 0;
+    return ballY <= BALL_RADIUS && ballDY <= 0;
   }
 
   function shouldBallBounceFromTBottomWall() {
-    return ballY + BALL_RADIUS >= CANVAS_HEIGHT;
+    return ballY + BALL_RADIUS >= CANVAS_HEIGHT && ballDY > 0;
   }
   function ballBounceFromWall() {
     ballDY = -ballDY;
   }
 
-  if (shouldBallBounceFromTopWall()) {
+  if (shouldBallBounceFromTopWall() || shouldBallBounceFromTBottomWall()) {
     ballBounceFromWall();
   }
-  if (shouldBallBounceFromTBottomWall()) {
-    ballBounceFromWall();
+
+  function isInBetween(val, min, max) {
+    return val >= min && val <= max;
+  }
+  function isBallOnTheSameHeightAsPaddle(paddleY) {
+    return isInBetween(ballY, paddleY, paddleY + PADDLE_HEIGHT);
+  }
+
+  function shouldBallBounceFromRightPaddle() {
+    return (
+      ballDX > 0 &&
+      isInBetween(
+        ballX + BALL_RADIUS,
+        PADDLE_P2_POS_X,
+        PADDLE_P2_POS_X + PADDLE_WIDTH
+      ) &&
+      isBallOnTheSameHeightAsPaddle(p2PaddleY)
+    );
+  }
+  function shouldBallBounceFromLeftPaddle() {
+    return (
+      ballDX < 0 &&
+      isInBetween(
+        ballX - BALL_RADIUS,
+        PADDLE_P1_POS_X,
+        PADDLE_P1_POS_X + PADDLE_WIDTH
+      ) &&
+      isBallOnTheSameHeightAsPaddle(p1PaddleY)
+    );
+  }
+
+  if (shouldBallBounceFromRightPaddle() || shouldBallBounceFromLeftPaddle()) {
+    ballDX = -ballDX;
+    ballDY = -ballDY;
   }
 }
 
