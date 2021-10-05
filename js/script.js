@@ -36,11 +36,37 @@ const P2_BUTTON_UP = "KeyP";
 const P2_BUTTON_DOWN = "KeyL";
 const PAUSE_BUTTON = "KeyB";
 
+// oop
+const ball = {
+  x: BALL_START_POS_X,
+  y: BALL_START_POS_Y,
+  dx: BALL_START_DIRECTION_X,
+  dy: BALL_START_DIRECTION_Y,
+
+  moveByStep: function () {
+    this.x += this.dx;
+    this.y += this.dy;
+    console.log(this.x, this.y, this.dx, this.dy);
+  },
+  shouldBounceFromTopWall: function () {
+    return this.y <= BALL_RADIUS && this.dy <= 0;
+  },
+  shouldBounceFromTBottomWall: function () {
+    return this.y + BALL_RADIUS >= CANVAS_HEIGHT && this.dy > 0;
+  },
+  bounceFromWall: function () {
+    this.dy = -this.dy;
+  },
+  bounceFromPaddle: function () {
+    this.dx = -this.dx;
+  },
+};
+
 // Game state
-let ballX = BALL_START_POS_X; // strart position
-let ballY = BALL_START_POS_Y; // start position
-let ballDX = BALL_START_DIRECTION_X; // ball direction X
-let ballDY = BALL_START_DIRECTION_Y; // ball direction Y
+let ballX = ball.x; // strart position: ;
+let ballY = ball.y; // start position
+let ballDX = ball.dx; // ball direction X
+let ballDY = ball.dy; // ball direction Y
 let p1PaddleY = PADDLE_START_POS_Y; // p1 paddle start position Y
 let p2PaddleY = PADDLE_START_POS_Y; // p2 paddle start position Y
 let p1Points = 0; // p1 points
@@ -121,13 +147,14 @@ function movePaddles() {
   }
 }
 
-function moveBallByStep() {
-  ballX += ballDX; // the same as ballX = ballX + ballDX;
-  ballY += ballDY; // the same as ballY = ballY + ballDY;
-}
+// function moveBallByStep() {
+//   ballX += ballDX; // the same as ballX = ballX + ballDX;
+//   ballY += ballDY; // the same as ballY = ballY + ballDY;
+// }
 
 function moveBall() {
-  moveBallByStep();
+  ball.moveByStep();
+  // moveBallByStep();
 }
 
 function updateState() {
@@ -158,16 +185,16 @@ function updateState() {
     moveBallToStartPos();
   }
 
-  function shouldBallBounceFromTopWall() {
-    return ballY <= BALL_RADIUS && ballDY <= 0;
-  }
+  // function shouldBallBounceFromTopWall() {
+  //   return ballY <= BALL_RADIUS && ballDY <= 0;
+  // }
 
-  function shouldBallBounceFromTBottomWall() {
-    return ballY + BALL_RADIUS >= CANVAS_HEIGHT && ballDY > 0;
-  }
-  function ballBounceFromWall() {
-    ballDY = -ballDY;
-  }
+  // function shouldBallBounceFromTBottomWall() {
+  //   return ballY + BALL_RADIUS >= CANVAS_HEIGHT && ballDY > 0;
+  // }
+  // function ballBounceFromWall() {
+  //   ballDY = -ballDY;
+  // }
 
   if (shouldBallBounceFromTopWall() || shouldBallBounceFromTBottomWall()) {
     ballBounceFromWall();
