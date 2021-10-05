@@ -50,7 +50,7 @@ const ball = {
   moveByStep: function () {
     this.x += this.dx;
     this.y += this.dy;
-    console.log(this.x, this.y, this.dx, this.dy);
+    // console.log(this.x, this.y, this.dx, this.dy);
   },
   shouldBounceFromTopWall: function () {
     return this.y <= BALL_RADIUS && this.dy <= 0;
@@ -68,11 +68,11 @@ const ball = {
     this.x = BALL_START_POS_X;
     this.y = BALL_START_POS_Y;
   },
-  isOutSideOfRightSide: function () {
-    return this.x >= CANVAS_WIDTH + BALL_RADIUS;
+  isOutsideOnRightWall: function () {
+    return this.x > CANVAS_WIDTH - BALL_RADIUS;
   },
-  isOutSideOfLeftSide: function () {
-    return this.x <= 0 - BALL_RADIUS;
+  isOutsideOnLeftWall: function () {
+    return this.x + BALL_RADIUS < 0;
   },
   isOnTheSameHeightAsPaddle(paddleY) {
     return isInBetween(this.y, paddleY, paddleY + PADDLE_HEIGHT);
@@ -102,10 +102,10 @@ const ball = {
 };
 
 // Game state
-let ballX = ball.x; // strart position: ;
-let ballY = ball.y; // start position
-let ballDX = ball.dx; // ball direction X
-let ballDY = ball.dy; // ball direction Y
+let ballX = BALL_START_POS_X; // strart position: ;
+let ballY = BALL_START_POS_Y; // start position: ;
+let ballDX = BALL_START_DIRECTION_X; // ball direction X
+let ballDY = BALL_START_DIRECTION_Y; // ball direction Y
 let p1PaddleY = PADDLE_START_POS_Y; // p1 paddle start position Y
 let p2PaddleY = PADDLE_START_POS_Y; // p2 paddle start position Y
 let p1Points = 0; // p1 points
@@ -154,7 +154,7 @@ function drawState() {
   drawPaddle(PADDLE_P1_POS_X, p1PaddleY);
   drawPaddle(PADDLE_P2_POS_X, p2PaddleY);
 
-  drawBall(ballX, ballY, BALL_RADIUS);
+  drawBall(ball.x, ball.y, BALL_RADIUS);
 }
 
 function coerceIn(val, min, max) {
@@ -186,11 +186,6 @@ function movePaddles() {
   }
 }
 
-// function moveBallByStep() {
-//   ballX += ballDX; // the same as ballX = ballX + ballDX;
-//   ballY += ballDY; // the same as ballY = ballY + ballDY;
-// }
-
 function moveBall() {
   if (ball.shouldBounceFromTopWall() || ball.shouldBounceFromTBottomWall()) {
     ball.bounceFromWall();
@@ -198,10 +193,10 @@ function moveBall() {
   if (ball.shouldBounceFromLeftPaddle() || ball.shouldBounceFromRightPaddle()) {
     ball.bounceFromPaddle();
   }
-  if (ball.isOutSideOfLeftSide) {
+  if (ball.isOutsideOnLeftWall()) {
     ball.moveToStart();
     p2Points++;
-  } else if (ball.isOutSideOfRightSide) {
+  } else if (ball.isOutsideOnRightWall()) {
     ball.moveToStart();
     p1Points++;
   }
@@ -214,79 +209,6 @@ function updateState() {
   //code tu update state
   moveBall();
   movePaddles();
-
-  // if ball is before left side of the left wall
-  // if ball is after  right side of the right wall
-
-  // function isBallOutSideOfRightSide() {
-  //   return ballX >= CANVAS_WIDTH + BALL_RADIUS;
-  // }
-  // function isBallOutSideOfLeftSide() {
-  //   return ballX <= 0 - BALL_RADIUS;
-  // }
-  // function moveBallToStartPos() {
-  //   ballX = BALL_START_POS_X;
-  //   ballY = BALL_START_POS_Y;
-  // }
-
-  // if (isBallOutSideOfRightSide()) {
-  //   p1Points++;
-  //   moveBallToStartPos();
-  // }
-  // if (isBallOutSideOfLeftSide()) {
-  //   p2Points++;
-  //   moveBallToStartPos();
-  // }
-
-  // function shouldBallBounceFromTopWall() {
-  //   return ballY <= BALL_RADIUS && ballDY <= 0;
-  // }
-
-  // function shouldBallBounceFromTBottomWall() {
-  //   return ballY + BALL_RADIUS >= CANVAS_HEIGHT && ballDY > 0;
-  // }
-  // function ballBounceFromWall() {
-  //   ballDY = -ballDY;
-  // }
-
-  // if (ball.shouldBounceFromTopWall() || ball.shouldBounceFromTBottomWall()) {
-  //   ball.bounceFromWall();
-  // }
-
-  // function isInBetween(val, min, max) {
-  //   return val >= min && val <= max;
-  // }
-  // function isBallOnTheSameHeightAsPaddle(paddleY) {
-  //   return isInBetween(ballY, paddleY, paddleY + PADDLE_HEIGHT);
-  // }
-
-  // function shouldBallBounceFromRightPaddle() {
-  //   return (
-  //     ballDX > 0 &&
-  //     isInBetween(
-  //       ballX + BALL_RADIUS,
-  //       PADDLE_P2_POS_X,
-  //       PADDLE_P2_POS_X + PADDLE_WIDTH
-  //     ) &&
-  //     isBallOnTheSameHeightAsPaddle(p2PaddleY)
-  //   );
-  // }
-  // function shouldBallBounceFromLeftPaddle() {
-  //   return (
-  //     ballDX < 0 &&
-  //     isInBetween(
-  //       ballX - BALL_RADIUS,
-  //       PADDLE_P1_POS_X,
-  //       PADDLE_P1_POS_X + PADDLE_WIDTH
-  //     ) &&
-  //     isBallOnTheSameHeightAsPaddle(p1PaddleY)
-  //   );
-  // }
-
-  // if (shouldBallBounceFromRightPaddle() || shouldBallBounceFromLeftPaddle()) {
-  //   ballDX = -ballDX;
-  //   ballDY = -ballDY;
-  // }
 }
 
 window.addEventListener("keydown", function (event) {
