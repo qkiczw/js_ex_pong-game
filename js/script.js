@@ -50,6 +50,7 @@ const ball = {
   moveByStep: function () {
     this.x += this.dx;
     this.y += this.dy;
+    ``;
     // console.log(this.x, this.y, this.dx, this.dy);
   },
   shouldBounceFromTopWall: function () {
@@ -100,6 +101,21 @@ const ball = {
     );
   },
 };
+
+function Player(name) {
+  // This function is a constructor (factory) for player objects
+  return {
+    name: name,
+    points: 0,
+    paddleY: PADDLE_START_POS_Y,
+  };
+}
+
+const p1 = Player("Łukasz");
+const p2 = Player("Maciej");
+
+console.log(p1);
+console.log(p2);
 
 // Game state
 let ballX = BALL_START_POS_X; // strart position: ;
