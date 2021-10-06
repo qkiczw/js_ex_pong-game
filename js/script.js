@@ -115,6 +115,12 @@ function Player(name) {
         const maxPaddelY = CANVAS_HEIGHT - PADDLE_HEIGHT;
         this.y = coerceIn(newPaddelY, minPaddelY, maxPaddelY);
       },
+      moveUP: function () {
+        this.setY(this.y - PADDLE_STEP);
+      },
+      moveDown: function () {
+        this.setY(this.y + PADDLE_STEP);
+      },
     },
   };
 }
@@ -186,29 +192,27 @@ function coerceIn(val, min, max) {
 }
 
 // this funtction stops paddle at the y end position (top and bottom)
-function coercePaddle(paddleY) {
-  const minPaddleY = 0;
-  const maxPaddleY = CANVAS_HEIGHT - PADDLE_HEIGHT;
+// function coercePaddle(paddleY) {
+//   const minPaddleY = 0;
+//   const maxPaddleY = CANVAS_HEIGHT - PADDLE_HEIGHT;
 
-  return coerceIn(paddleY, minPaddleY, maxPaddleY);
-}
+//   return coerceIn(paddleY, minPaddleY, maxPaddleY);
+// }
 
 function movePaddles() {
   const yMin = 0;
   const yMax = CANVAS_HEIGHT - PADDLE_HEIGHT;
 
   if (p1Action === PADDLE_ACTION_UP) {
-    // p1PaddleY = coercePaddle(p1PaddleY - PADDLE_STEP, yMin, yMax);
-    p1.paddle.setY(p1.paddle.y - PADDLE_STEP);
+    p1.paddle.moveUP();
   } else if (p1Action === PADDLE_ACTION_DOWN) {
-    // p1PaddleY = coercePaddle(p1PaddleY + PADDLE_STEP, yMin, yMax);
-    p1.paddle.setY(p1.paddle.y + PADDLE_STEP);
+    p1.paddle.moveDown();
   }
 
   if (p2Action === "up") {
-    p2.paddle.setY(p2.paddle.y - PADDLE_STEP);
+    p2.paddle.moveUP();
   } else if (p2Action === "down") {
-    p2.paddle.setY(p2.paddle.y + PADDLE_STEP);
+    p2.paddle.moveDown();
   }
 }
 
@@ -228,14 +232,12 @@ function moveBall() {
   }
 
   ball.moveByStep();
-  // moveBallByStep();
 }
 
 function updateState() {
   //code tu update state
   moveBall();
   movePaddles();
-  console.log(p1.paddle.y);
 }
 
 window.addEventListener("keydown", function (event) {
