@@ -50,8 +50,6 @@ const ball = {
   moveByStep: function () {
     this.x += this.dx;
     this.y += this.dy;
-    ``;
-    // console.log(this.x, this.y, this.dx, this.dy);
   },
   shouldBounceFromTopWall: function () {
     return this.y <= BALL_RADIUS && this.dy <= 0;
@@ -107,6 +105,14 @@ function Player(name) {
   return {
     name: name,
     points: 0,
+    action: "stop",
+    makeAction: function () {
+      if (this.action === PADDLE_ACTION_UP) {
+        this.paddle.moveUP();
+      } else if (this.action === PADDLE_ACTION_DOWN) {
+        this.paddle.moveDown();
+      }
+    },
     paddle: {
       y: PADDLE_START_POS_Y,
       setY: function (newPaddelY) {
@@ -191,29 +197,9 @@ function coerceIn(val, min, max) {
   return Math.max(Math.min(val, max), min);
 }
 
-// this funtction stops paddle at the y end position (top and bottom)
-// function coercePaddle(paddleY) {
-//   const minPaddleY = 0;
-//   const maxPaddleY = CANVAS_HEIGHT - PADDLE_HEIGHT;
-
-//   return coerceIn(paddleY, minPaddleY, maxPaddleY);
-// }
-
 function movePaddles() {
-  const yMin = 0;
-  const yMax = CANVAS_HEIGHT - PADDLE_HEIGHT;
-
-  if (p1Action === PADDLE_ACTION_UP) {
-    p1.paddle.moveUP();
-  } else if (p1Action === PADDLE_ACTION_DOWN) {
-    p1.paddle.moveDown();
-  }
-
-  if (p2Action === "up") {
-    p2.paddle.moveUP();
-  } else if (p2Action === "down") {
-    p2.paddle.moveDown();
-  }
+  p1.makeAction();
+  p2.makeAction();
 }
 
 function moveBall() {
@@ -242,32 +228,33 @@ function updateState() {
 
 window.addEventListener("keydown", function (event) {
   if (event.code === P1_BUTTON_UP) {
-    p1Action = PADDLE_ACTION_UP;
+    p1.action = PADDLE_ACTION_UP;
   } else if (event.code === P1_BUTTON_DOWN) {
-    p1Action = PADDLE_ACTION_DOWN;
+    p1.action = PADDLE_ACTION_DOWN;
   }
 
   if (event.code === P2_BUTTON_UP) {
-    p2Action = PADDLE_ACTION_UP;
+    p2.action = PADDLE_ACTION_UP;
   } else if (event.code === P2_BUTTON_DOWN) {
-    p2Action = PADDLE_ACTION_DOWN;
+    p2.action = PADDLE_ACTION_DOWN;
   }
 });
 window.addEventListener("keyup", function (event) {
   let code = event.code;
   if (
-    (code === P1_BUTTON_UP && p1Action === PADDLE_ACTION_UP) ||
-    (code === P1_BUTTON_DOWN && p1Action === PADDLE_ACTION_DOWN)
+    (code === P1_BUTTON_UP && p1.action === PADDLE_ACTION_UP) ||
+    (code === P1_BUTTON_DOWN && p1.action === PADDLE_ACTION_DOWN)
   ) {
-    p1Action = PADDLE_ACTION_STOP;
+    p1.action = PADDLE_ACTION_STOP;
   } else if (
-    (code === P2_BUTTON_UP && p2Action === PADDLE_ACTION_UP) ||
-    (code === P2_BUTTON_DOWN && p2Action === PADDLE_ACTION_DOWN)
+    (code === P2_BUTTON_UP && p2.action === PADDLE_ACTION_UP) ||
+    (code === P2_BUTTON_DOWN && p2.action === PADDLE_ACTION_DOWN)
   ) {
-    p2Action = PADDLE_ACTION_STOP;
+    p2.action = PADDLE_ACTION_STOP;
   }
 });
 
+// this listener is for pause the game
 window.addEventListener("keydown", function (event) {
   let code = event.code;
   if (code === PAUSE_BUTTON) {
